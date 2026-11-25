@@ -56,11 +56,17 @@ Documents:
 """
 
 
-def build_prompt(docs: list[SourceDoc]) -> str:
+def build_prompt(docs: list[SourceDoc], prompt: str = "v1") -> str:
+    """v1: the prompt used in run 1. guide: v1 plus the human labeller's guide (frozen 23 Nov),
+    so the model gets the same decision rules the hand labels were made with."""
     fields = "\n".join(f"- {f.value}: {q}" for f, q in QUESTIONS.items())
     ptypes = ", ".join(p.value for p in PromiseType)
     body = "\n\n".join(f'<doc id="{d.doc_id}">\n{d.text}\n</doc>' for d in docs)
-    return PROMPT.format(fields=fields, ptypes=ptypes, docs=body)
+    text = PROMPT.format(fields=fields, ptypes=ptypes, docs=body)
+    if prompt == "guide":
+        guide = (Path(__file__).parent / "guide_for_model.md").read_text(encoding="utf-8")
+        text = text.replace("Documents:\n", "Decision rules (follow these exactly):\n" + guide + "\nDocuments:\n", 1)
+    return text
 
 
 def parse_json(raw: str) -> dict:
@@ -96,7 +102,7 @@ def call_model(prompt: str, backend: str, model: str | None = None) -> str:
 
 
 def extract(offer_id: str, docs: list[SourceDoc], backend: str = "cached",
-            model: str | None = None, cache_dir: Path = Path("data/extractions")) -> dict:
+            model: str | None = None, cache_dir: Path = Path("data/extractions"), prompt: str = "v1") -> dict:
     path = cache_dir / f"{offer_id}.json"
     if backend == "cached":
         return json.loads(path.read_text(encoding="utf-8"))
@@ -106,7 +112,7 @@ def extract(offer_id: str, docs: list[SourceDoc], backend: str = "cached",
     for rnd in range(3):                       # up to 3 rounds over the model list
         for m in models:
             try:
-                raw, used = call_model(build_prompt(docs), backend, m), m
+                raw, used = call_model(build_prompt(docs, prompt), backend, m), m
                 break
             except Exception as exc:           # noqa: BLE001
                 last = exc
@@ -123,7 +129,7 @@ def extract(offer_id: str, docs: list[SourceDoc], backend: str = "cached",
         raise last
     model = used
     data = parse_json(raw)
-    data["_backend"], data["_model"] = backend, model or "default"
+    data["_backend"], data["_model"], data["_prompt"] = backend, model or "default", prompt
     cache_dir.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
     return data

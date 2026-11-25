@@ -18,3 +18,11 @@
   guide (v1.0, frozen 23 Nov) already said ("If the page says so → stated"). In run 1 the rule wrongly
   downgraded 8 correct answers (7 terms_can_change, 1 terms_elsewhere).
 - No other rule, prompt or label was changed. Both v1.0 and v1.0.1 scores are reported.
+
+## Run 2 design — 25 Nov 2026 (decided after seeing run 1; its scores are optimistic)
+- `--prompt guide`: the run-1 prompt plus the human labeller's guide (frozen 23 Nov), offer references
+  removed, so the model gets the same decision rules as the hand labeller. The guide's examples are
+  phrases taken from offers in the evaluation set, so this is not a clean held-out test.
+- Run 2a: gemini-3.5-flash-lite + guide prompt (effect of the instructions).
+- Run 2b: gemini-3.8-flash + guide prompt (effect of a stronger model).
+- Rules v1.0.1 apply to all runs. No labels were changed.

@@ -49,25 +49,29 @@ def main() -> None:
     b.add_argument("--all", action="store_true")
     b.add_argument("--backend", default="cached")
     b.add_argument("--model")
+    b.add_argument("--prompt", default="v1", choices=["v1", "guide"])
+    b.add_argument("--run", default="", help="name of a run folder; keeps runs apart, e.g. run2a")
     ev = sub.add_parser("eval")
     ev.add_argument("--labels", default=str(DATA / "labels.csv"))
+    ev.add_argument("--run", default="")
     a = ap.parse_args()
 
     offers = load_offers()
-    out = DATA / "cards"
+    ext_dir = DATA / "extractions" / a.run if a.run else DATA / "extractions"
+    out = DATA / "cards" / a.run if a.run else DATA / "cards"
     out.mkdir(parents=True, exist_ok=True)
     if a.cmd == "build":
         ids = list(offers) if a.all else [a.offer]
         if a.backend != "cached" and a.all:     # resume: skip offers already extracted
-            done = [o for o in ids if (DATA / "extractions" / f"{o}.json").exists()
-                    and "_backend" in (DATA / "extractions" / f"{o}.json").read_text(encoding="utf-8")]
+            done = [o for o in ids if (ext_dir / f"{o}.json").exists()
+                    and "_backend" in (ext_dir / f"{o}.json").read_text(encoding="utf-8")]
             if done:
                 print(f"skipping {len(done)} already extracted: {', '.join(done)}")
             ids = [o for o in ids if o not in done]
         for oid in ids:
             title, docs = offers[oid]
             try:
-                ext = extract(oid, docs, a.backend, a.model)
+                ext = extract(oid, docs, a.backend, a.model, ext_dir, a.prompt)
             except Exception as exc:  # noqa: BLE001  keep going; report at the end
                 print(f"{oid}: FAILED ({exc})")
                 continue

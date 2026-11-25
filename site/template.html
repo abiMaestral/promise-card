@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Placement Promise Card</title>
+<style>
+  :root{--ink:#1c1c1c;--muted:#626262;--line:#e2e2e2;--bg:#fafaf8;--card:#fff;--accent:#2b5fb3;
+        --stated:#1b6e3a;--stated-bg:#e3f3e8;--vague:#8a5a00;--vague-bg:#fdf0d5;
+        --contra:#9b1c1c;--contra-bg:#fbe2e2;--none:#555;--none-bg:#ececec;--na:#777;--na-bg:#f4f4f4}
+  *{box-sizing:border-box;min-width:0}
+  body{margin:0;font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:var(--bg)}
+  header{padding:26px max(5vw,16px) 0;background:var(--card);border-bottom:1px solid var(--line)}
+  h1{margin:0;font-size:clamp(24px,3vw,32px);line-height:1.1}
+  .by{color:var(--muted);font-size:14px;margin-top:4px}
+  .lede{max-width:760px;margin:12px 0 0}
+  .tabs{display:flex;gap:4px;margin-top:18px;flex-wrap:wrap}
+  .tabs button{border:0;background:none;font:inherit;padding:10px 14px;cursor:pointer;border-bottom:3px solid transparent;color:var(--muted)}
+  .tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent);font-weight:600}
+  .wrap{padding:22px max(5vw,16px);max-width:1180px}
+  .panel[hidden]{display:none}
+  textarea,input,select{font:inherit;font-size:16px;border:1px solid #cfcfcf;border-radius:8px;padding:10px;background:#fff;color:var(--ink);width:100%}
+  textarea{min-height:200px;resize:vertical}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:10px 0}
+  .btn{border:0;border-radius:8px;padding:11px 16px;font:inherit;font-weight:600;cursor:pointer;background:var(--accent);color:#fff;min-height:44px}
+  .btn.alt{background:#fff;color:var(--accent);border:1px solid var(--accent)}
+  .btn:disabled{opacity:.5;cursor:default}
+  button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #9bb8ea;outline-offset:2px}
+  .small{font-size:13px;color:var(--muted)}
+  .grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px}
+  .box{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:10px 0}
+  .flag{border-left:4px solid var(--vague);padding:4px 10px;margin:8px 0;font-size:14px}
+  .flag.def{border-left-color:var(--accent)}
+  .flag b{font-size:12px;display:block;color:var(--muted);font-weight:600}
+  mark{background:#fdf0d5;padding:0 2px;border-radius:3px}
+  .gal{display:grid;grid-template-columns:280px minmax(0,1fr);gap:0;border:1px solid var(--line);border-radius:10px;background:var(--card);overflow:hidden}
+  .gal nav{border-right:1px solid var(--line);max-height:80vh;overflow:auto}
+  .gal nav button{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid var(--line);background:none;padding:10px 14px;cursor:pointer;font:inherit;font-size:15px;color:inherit}
+  .gal nav button[aria-current="true"]{background:#eef3fb;box-shadow:inset 3px 0 0 var(--accent)}
+  .gal nav .id{font-size:12px;color:var(--muted)}
+  .gal section{padding:16px 20px}
+  .f{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:10px 0}
+  .fh{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+  .t{font-weight:600}.q{font-size:13px;color:var(--muted)}
+  .badges{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+  .b{font-size:13px;font-weight:600;padding:2px 9px;border-radius:99px;white-space:nowrap}
+  .b.h{background:#fff;border:1px dashed #999;color:#333;font-weight:500}
+  .b.h.miss{border-color:var(--contra);color:var(--contra)}
+  .v{margin:6px 0}
+  .qt{border-left:3px solid #cfcfcf;padding:2px 10px;margin:6px 0;font-size:14px;color:#333}
+  .chk{font-size:13px;color:var(--vague)}
+  .chk::before{content:"checker: "}
+  .note{background:#f1f1ee;border-radius:8px;padding:10px 14px;font-size:14px;color:#444;margin:12px 0}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:14px 0}
+  .stat{border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:var(--card)}
+  .stat b{display:block;font-size:24px}
+  table{border-collapse:collapse;width:100%;background:var(--card);font-size:15px}
+  th,td{border-bottom:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+  td.n{text-align:right;white-space:nowrap}
+  .err{color:var(--contra);font-size:14px}
+  footer{padding:18px max(5vw,16px);font-size:13px;color:var(--muted);border-top:1px solid var(--line);background:var(--card)}
+  @media (max-width:820px){.grid2{grid-template-columns:1fr}.gal{grid-template-columns:1fr}.gal nav{max-height:240px;border-right:0;border-bottom:1px solid var(--line)}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Placement Promise Card</h1>
+  <div class="by">Abishikth Ebenezer · built for the ATRISI Amplify Builder Challenge · November 2026</div>
+  <p class="lede">Paid "job guarantee", placement and internship offers ask freshers to pay first. Before paying, you should be able to answer eight questions: how much, when, what exactly is promised, what you must do, whether terms can change, what happens if you're not placed, whether you can refuse an offer, and whether some terms are hidden in another document. This tool answers them from the offer's own words, and says <b>vague</b> or <b>not stated</b> when the offer doesn't really say.</p>
+  <div class="tabs" role="tablist">
+    <button role="tab" aria-selected="true" data-tab="try">Check an offer</button>
+    <button role="tab" aria-selected="false" data-tab="cards">23 real offers</button>
+    <button role="tab" aria-selected="false" data-tab="results">How well it works</button>
+  </div>
+</header>
+
+<div class="wrap">
+<div class="panel" id="p-try">
+  <div class="grid2">
+    <div>
+      <label for="txt"><b>Paste the offer's terms</b> <span class="small">(refund policy, FAQ, offer letter, course page)</span></label>
+      <textarea id="txt" placeholder="Paste the text of the offer here..."></textarea>
+      <div class="row"><button class="btn" id="go">Check the wording</button><button class="btn alt" id="sample">Load a sample offer</button></div>
+      <p class="small">"Check the wording" runs in your browser, with no AI and no data sent anywhere. It finds amounts, open-ended phrases and pointers to documents you haven't been shown.</p>
+      <div class="box">
+        <b>Draft the full card with AI</b> <span class="small">(optional, uses your own free Gemini key)</span>
+        <div class="row"><input id="key" type="password" autocomplete="off" placeholder="Gemini API key (from aistudio.google.com)" aria-label="Gemini API key"></div>
+        <div class="row"><select id="model" aria-label="Model"><option>gemini-3.5-flash-lite</option><option>gemini-3.8-flash</option><option>gemini-3-flash-preview</option></select><button class="btn" id="ai">Draft card</button></div>
+        <p class="small">The key stays in this page's memory and is sent only to Google. Every quote the AI returns is checked against your text; quotes that aren't there are removed.</p>
+      </div>
+    </div>
+    <div id="out"><div class="note">Results appear here.</div></div>
+  </div>
+</div>
+
+<div class="panel" id="p-cards" hidden>
+  <p class="small">Cards drafted by AI (Gemini 3.5 Flash-Lite) from saved copies of 23 real offers, then checked by code. Tick "Show my label" to compare each answer with how I labelled it by hand. Provider names are hidden.</p>
+  <div class="gal"><nav id="list" aria-label="Offers"></nav><section id="card" aria-live="polite"></section></div>
+</div>
+
+<div class="panel" id="p-results" hidden>
+  <div class="stats">
+    <div class="stat"><b>6 of 25</b>offers where I could work out the total cost</div>
+    <div class="stat"><b>19 of 25</b>point to terms in a document you haven't seen</div>
+    <div class="stat"><b>11 of 187</b>AI quotes weren't in the source, and were removed</div>
+    <div class="stat"><b>8 of ~30</b>terms pages changed or vanished within days</div>
+  </div>
+  <h3>AI vs my hand labels (25 offers × 8 questions = 200 answers)</h3>
+  <table>
+    <thead><tr><th>Setup</th><th class="n">Agreement</th><th class="n">Cohen's κ</th></tr></thead>
+    <tbody id="restable"></tbody>
+  </table>
+  <h3>What I learned from the numbers</h3>
+  <ul>
+    <li>The AI's most common mistake is calling vague terms clear (21 of 200). For a tool that is supposed to warn you, that's the worst direction to be wrong.</li>
+    <li>It found none of the 5 contradictions inside a single document (for example a fee table and an FAQ on the same page giving different drop-out fees).</li>
+    <li>When I re-labelled 10 offers a day later, I changed 15 of 80 answers myself, mostly between "stated" and "vague". That line is genuinely hard, so the card always shows the quote next to its verdict.</li>
+    <li>My own rule had a bug: it marked "we may modify these terms" as vague, when for "Can terms change?" that sentence <i>is</i> the clear answer. The evaluation caught it; both scores are shown.</li>
+  </ul>
+</div>
+</div>
+
+<footer>Code, method and data notes: see the GitHub README. Offers were saved 22–24 Nov 2026; several pages have changed since. This tool reports how clearly an offer is written. It does not say whether an offer is fair, legal or genuine.</footer>
+
+<script>
+{
+const DATA = /*DATA*/[];
+const RESULTS = /*RESULTS*/[];
+const SAMPLE = /*SAMPLE*/"";
+const GUIDE = /*GUIDE*/"";
+const Q = {total_cost:["What you pay","How much will I pay in total?"],payment_timing:["When you pay","When is each payment due?"],
+  promise:["What is promised","What exactly is guaranteed?"],conditions:["Conditions you must meet","What must I do to qualify?"],
+  terms_can_change:["Can terms change later?","Can the provider add conditions or change terms later?"],
+  if_not_placed:["If the promise is not met","What happens if I am not placed?"],refuse_offer:["If you refuse an offer","Can I refuse an offer without losing money?"],
+  terms_elsewhere:["Terms kept elsewhere","Are relevant terms on other pages, or in documents not shown?"]};
+const FIELDS = Object.keys(Q);
+const S = {stated:["Stated","--stated"],vague:["Vague","--vague"],contradictory:["Contradictory","--contra"],not_stated:["Not stated","--none"],not_applicable:["Not applicable","--na"]};
+const PTYPES = ["job_offer","placement_or_refund","salary_floor","interview_count","internship","stipend_or_pay","assistance_only","aim","none"];
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const badge = s => {const [l,v]=S[s]||[s,"--none"];return `<span class="b" style="color:var(${v});background:var(${v}-bg)">${l}</span>`;};
+
+/* ---- same rules as promise_card/clauses.py ---- */
+const OPEN = [["from time to time",/from time to time/i],["may be amended/modified",/\bmay (?:be )?(?:amend|modif|revis|chang|updat)\w*/i],
+ ["subject to change",/subject to (?:change|revision|modification)/i],["as may be communicated",/as may be (?:communicated|notified|decided|informed)/i],
+ ["additional conditions",/(?:any )?additional (?:conditions|terms|criteria)/i],["sole discretion",/(?:sole|absolute) discretion/i],
+ ["subject to T&C",/subject to (?:the )?(?:t\s*&\s*c|terms and conditions|terms & conditions)/i],["e.g. in a term",/\(e\.g\.,?[^)]*\)/i],
+ ["typically/usually",/\b(?:typically|usually|generally)\b/i],["continued use = acceptance",/continued use[^.]{0,80}accept/i],
+ ["based on performance",/based on (?:your )?(?:performance|merit|evaluation)/i],["successful completion",/successful(?:ly)? complet\w*/i]];
+const DEF = [["shared upon/after enrolment",/shared[^.]{0,40}(?:upon|after|on)[^.]{0,30}(?:enrol|enroll|registration|verification|payment)/i],
+ ["in the offer email/letter",/(?:in|via) the (?:offer|enrol\w*|admission) (?:email|letter|mail)/i],
+ ["separate policy/agreement",/(?:separate|our|the) (?:placement|refund|isa|income share)? ?(?:policy|agreement)(?! below)/i],
+ ["agreement to be signed",/(?:sign|execute)\w* (?:an?|the) (?:agreement|isa|contract)/i],
+ ["refer to / as per",/\b(?:refer to|as per) (?:the |our )?(?:terms|policy|agreement|document|guidelines)/i],
+ ["will be shared later",/will be (?:shared|provided|communicated|sent) (?:later|separately|after|upon|on)/i]];
+// single line breaks inside a paragraph (common in copied PDF text) are joined; blank lines and list items split
+const sentences = t => t.replace(/\n(?!\n|\s*(?:[-•*]|\d+[.)])\s)/g," ").split(/(?<=[.!?])\s+|\n+/).map(s=>s.trim()).filter(Boolean);
+const AMT = /(?:rs\.?|₹|inr)\s*\d[\d,]*(?:\.\d+)?(?:\s*(?:lakh|lac|k)\b)?|\d[\d,.]*\s*(?:lpa|%)|\d+\s*(?:days?|weeks?|months?|years?)\b/ig;
+
+/* ---- same as promise_card/quote_check.py ---- */
+function norm(t){
+  t = t.replace(/[‘’]/g,"'").replace(/[“”]/g,'"').replace(/[–—−]/g,"-").replace(/ /g," ").replace(/…/g,"...").toLowerCase();
+  t = t.replace(/(₹|\brs\.?|\binr\b)\s*/gi,"rs ").replace(/[*_`]/g,"").replace(/(?<=\w)-(?=\w)/g,"").replace(/\s*\/\s*/g,"/");
+  return t.replace(/\s+/g," ").trim();
+}
+const piece = (p,tn) => {const q=norm(p).replace(/^[ ."']+|[ ."']+$/g,"");return q.length>=4 && tn.includes(q);};
+function quoteIn(q,t){const tn=norm(t);if(!q.includes("|"))return piece(q,tn);
+  const cells=q.split("|").filter(c=>norm(c).replace(/^[ ."']+|[ ."']+$/g,"").length>=4);return cells.length>0&&cells.every(c=>piece(c,tn));}
+
+function checkWording(){
+  const t = document.getElementById("txt").value.trim(); const out = document.getElementById("out");
+  if (!t){out.innerHTML=`<div class="note">Paste some text first.</div>`;return;}
+  const ss = sentences(t); let open=[], def=[];
+  for (const s of ss){for (const [l,rx] of OPEN) if (rx.test(s)) open.push([l,s]); for (const [l,rx] of DEF) if (rx.test(s)) def.push([l,s]);}
+  const amts = [...new Set((t.match(AMT)||[]).map(a=>a.trim()))];
+  const mark = (s,rx) => esc(s).replace(new RegExp(rx.source,"ig"),m=>`<mark>${m}</mark>`);
+  let h = `<h3>What the wording shows</h3><div class="box"><b>Amounts and time limits found (${amts.length})</b><p>${amts.length?amts.map(esc).join(" · "):"None. If you are asked to pay, the amount isn't in this text."}</p></div>`;
+  h += `<div class="box"><b>Open-ended or undefined wording (${open.length})</b><p class="small">Terms the provider can change, or that depend on something never defined.</p>${open.map(([l,s])=>`<div class="flag"><b>${esc(l)}</b>${mark(s,OPEN.find(o=>o[0]===l)[1])}</div>`).join("")||"<p>None found.</p>"}</div>`;
+  h += `<div class="box"><b>Terms kept in another document (${def.length})</b><p class="small">Ask to see these before you pay.</p>${def.map(([l,s])=>`<div class="flag def"><b>${esc(l)}</b>${mark(s,DEF.find(o=>o[0]===l)[1])}</div>`).join("")||"<p>None found.</p>"}</div>`;
+  out.innerHTML = h;
+}
+
+function buildPrompt(t){
+  const fields = FIELDS.map(f=>`- ${f}: ${Q[f][1]}`).join("\n");
+  return `You are filling in a "Placement Promise Card" for a paid training, internship or placement offer. You do NOT judge whether the offer is good, bad, fair or fraudulent. You only report what the document says, with exact quotes.
+
+For each field choose exactly one state: "stated", "vague", "contradictory", "not_stated" or "not_applicable".
+
+Fields and questions:
+${fields}
+
+Also classify the main promise as one of: ${PTYPES.join(", ")}.
+
+Rules:
+1. Every quote must be copied EXACTLY, character for character, from the document. Short quotes are best.
+2. "stated", "vague" and "contradictory" need at least one quote; "contradictory" needs both. "not_stated" and "not_applicable" have no quotes.
+3. "value" is a short plain-English answer (max 25 words) using only what is quoted. Never add facts or advice.
+
+Decision rules (follow these exactly):
+${GUIDE}
+
+Return ONLY JSON: {"promise_type":"...","fields":[{"field":"total_cost","state":"...","value":"...","quotes":["..."]}, ...]}
+
+Document:
+<doc>
+${t}
+</doc>`;
+}
+
+function checkCard(ext, t){
+  const fields = [], removed = [];
+  for (const f of FIELDS){
+    const raw = (ext.fields||[]).find(x=>x.field===f) || {state:"not_stated",value:"",quotes:[]};
+    let st = S[raw.state] ? raw.state : "not_stated", v = raw.value||"", notes = [], qs = [];
+    for (const q of (raw.quotes||[])){ const txt = typeof q==="string"?q:(q.text||""); if (quoteIn(txt,t)) qs.push(txt); else {removed.push(txt); notes.push("quote not found in your text, removed");} }
+    if (["stated","vague","contradictory"].includes(st) && !qs.length){notes.push(`AI said ${st}, but no quote could be found → not stated`); st="not_stated"; v="";}
+    if (st==="contradictory" && qs.length<2){notes.push("contradictory needs two quotes → vague"); st="vague";}
+    if (st==="stated" && f!=="terms_can_change" && f!=="terms_elsewhere"){
+      const hits = OPEN.filter(([l,rx])=>qs.some(q=>rx.test(q))).map(o=>o[0]);
+      if (hits.length){notes.push(`open-ended wording in the quote (${hits.join(", ")}) → vague`); st="vague";}
+    }
+    fields.push({f, s:st, v, q:qs, n:notes});
+  }
+  const te = fields.find(x=>x.f==="terms_elsewhere");
+  if (te.s==="not_stated"){ for (const s of sentences(t)) { const d = DEF.find(([l,rx])=>rx.test(s)); if (d){te.s="stated";te.v=`Refers to terms elsewhere (${d[0]}).`;te.q=[s];te.n.push("set by the deferred-terms rule");break;} } }
+  return {fields, removed, ptype: PTYPES.includes(ext.promise_type)?ext.promise_type:"none"};
+}
+
+function renderFields(fields, compare){
+  return fields.map(f=>{
+    const hl = compare && f.h ? `<span class="b h ${f.h===f.s?"":"miss"}">my label: ${(S[f.h]||[f.h])[0]}</span>` : "";
+    return `<div class="f"><div class="fh"><div><div class="t">${Q[f.f][0]}</div><div class="q">${Q[f.f][1]}</div></div><div class="badges">${badge(f.s)}${hl}</div></div>`+
+      (f.v?`<div class="v">${esc(f.v)}</div>`:"")+f.q.map(q=>`<div class="qt">“${esc(q)}”</div>`).join("")+f.n.map(n=>`<div class="chk">${esc(n)}</div>`).join("")+`</div>`;
+  }).join("");
+}
+
+async function draftCard(){
+  const t = document.getElementById("txt").value.trim(), key = document.getElementById("key").value.trim(), model = document.getElementById("model").value, out = document.getElementById("out"), btn = document.getElementById("ai");
+  if (!t){out.innerHTML=`<div class="note">Paste some text first.</div>`;return;}
+  if (!key){out.innerHTML=`<div class="note">Add your Gemini API key, or use "Check the wording", which needs no key.</div>`;return;}
+  btn.disabled = true; out.innerHTML = `<div class="note">Asking ${esc(model)}… (can take 20–60 seconds)</div>`;
+  try{
+    const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`,{method:"POST",
+      headers:{"Content-Type":"application/json","x-goog-api-key":key},
+      body:JSON.stringify({contents:[{parts:[{text:buildPrompt(t)}]}],generationConfig:{temperature:0,responseMimeType:"application/json"}})});
+    const j = await r.json();
+    if (!r.ok) throw new Error((j.error&&j.error.message)||`HTTP ${r.status}`);
+    const txt = j.candidates?.[0]?.content?.parts?.map(p=>p.text||"").join("") || "";
+    const ext = JSON.parse(txt.slice(txt.indexOf("{"), txt.lastIndexOf("}")+1));
+    const c = checkCard(ext, t);
+    out.innerHTML = `<h3>Promise Card</h3><div class="small">Promise type: ${esc(c.ptype.replace(/_/g," "))} · model: ${esc(model)}${c.removed.length?` · <b>${c.removed.length} AI quote(s) removed</b> because they weren't in your text`:""}</div><div class="note">What the text says, quoted exactly. It doesn't judge whether the offer is fair, legal or genuine.</div>`+renderFields(c.fields,false);
+  }catch(e){
+    const msg = String(e.message||e);
+    out.innerHTML = `<div class="err">Couldn't draft the card: ${esc(msg.slice(0,200))}</div><p class="small">${/high demand|overloaded|503/i.test(msg)?"Google's free tier is busy. Try another model from the list, or try again in a few minutes.":"Check the key and try again."}</p>`;
+  }finally{ btn.disabled = false; }
+}
+
+let current = 0, compare = false;
+function renderList(){
+  const nav = document.getElementById("list");
+  nav.innerHTML = DATA.map((d,i)=>`<button aria-current="${i===current}" data-i="${i}"><div class="id">${d.id}</div>${esc(d.title)}</button>`).join("");
+  nav.querySelectorAll("button").forEach(b=>b.onclick=()=>{current=+b.dataset.i;renderList();renderCard();});
+}
+function renderCard(){
+  const d = DATA[current], agree = d.fields.filter(f=>f.s===f.h).length;
+  document.getElementById("card").innerHTML = `<div class="fh"><div><h3 style="margin:0">${esc(d.title)}</h3><div class="small">${d.id} · promise type: ${esc(d.ptype.replace(/_/g," "))}${d.rejected?` · ${d.rejected} AI quote(s) removed by the checker`:""}</div></div>
+    <label class="small" style="display:flex;gap:6px;align-items:center;cursor:pointer"><input type="checkbox" id="cmp" style="width:auto" ${compare?"checked":""}> Show my label (${agree}/8 agree)</label></div>`+renderFields(d.fields,compare);
+  document.getElementById("cmp").onchange = e => {compare=e.target.checked; renderCard();};
+}
+
+document.getElementById("restable").innerHTML = RESULTS.map(r=>`<tr><td>${esc(r[0])}</td><td class="n">${esc(r[1])}</td><td class="n">${esc(r[2])}</td></tr>`).join("");
+document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll(".tabs button").forEach(x=>x.setAttribute("aria-selected",x===b));
+  document.querySelectorAll(".panel").forEach(p=>p.hidden = p.id!=="p-"+b.dataset.tab);
+});
+document.getElementById("go").onclick = checkWording;
+document.getElementById("ai").onclick = draftCard;
+document.getElementById("sample").onclick = ()=>{document.getElementById("txt").value = SAMPLE; checkWording();};
+renderList(); renderCard();
+}
+</script>
+</body>
+</html>

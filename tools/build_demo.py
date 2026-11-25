@@ -1,6 +1,6 @@
-"""Build the public demo: one self-contained HTML page with anonymised cards.
+"""Build the public site: one self-contained page (try-it tool + anonymised cards + results).
 
-  python tools/build_demo.py runs/run1_2026-11-25/cards_v1.0.1 -> demo/index.html
+  python tools/build_demo.py runs/run1_2026-11-25/cards_v1.0.1 -> docs/index.html (GitHub Pages)
 
 Provider names, URLs, e-mails and phone numbers are replaced in every quote. Friends' documents
 (FA, FB) are left out of the public page.
@@ -51,7 +51,22 @@ for p in sorted(CARDS.glob("*.json")):
     })
 order = {"P": 0, "L": 1}
 data.sort(key=lambda d: (order[d["id"][0]], d["id"]))
-page = Path("demo/template.html").read_text(encoding="utf-8").replace("/*DATA*/[]", json.dumps(data, ensure_ascii=False))
-Path("demo/index.html").write_text(page, encoding="utf-8")
+RESULTS = [["Me, re-labelling 10 offers a day later (80 answers)", "81.0%", "0.72"],
+           ["AI alone (Gemini 3.5 Flash-Lite)", "66.0%", "0.49"],
+           ["AI + code checks (rules as first frozen)", "64.5%", "0.48"],
+           ["AI + code checks (one bug fixed)", "68.5%", "0.54"]]
+extra = Path("runs/extra_results.json")
+if extra.exists():
+    RESULTS += json.loads(extra.read_text(encoding="utf-8"))
+guide = Path("promise_card/guide_for_model.md").read_text(encoding="utf-8")
+sample = Path("tests/fixtures/L20.txt").read_text(encoding="utf-8")
+sample = "\n".join(re.sub(r"^[^\w(\[\"]+", "", l) for l in sample.splitlines() if not l.startswith("#"))  # drop OCR icon glyphs
+page = (Path("site/template.html").read_text(encoding="utf-8")
+        .replace("/*DATA*/[]", json.dumps(data, ensure_ascii=False))
+        .replace("/*RESULTS*/[]", json.dumps(RESULTS, ensure_ascii=False))
+        .replace('/*SAMPLE*/""', json.dumps("Sample: a real internship FAQ, name hidden.\n\n" + sample, ensure_ascii=False))
+        .replace('/*GUIDE*/""', json.dumps(guide, ensure_ascii=False)))
+Path("docs/index.html").write_text(page, encoding="utf-8")
+Path("docs/.nojekyll").write_text("")
 leak = re.findall(r"\b(?:" + BRANDS + r")\b", page, re.I)
 print(f"{len(data)} cards written; brand names left in page: {len(leak)}")

@@ -14,7 +14,14 @@ conditions, whether terms can change, what happens if you are not placed, whethe
 and whether terms are kept elsewhere). Each answer is marked **stated, vague, contradictory, not stated** or
 **not applicable**, with an exact quote. The card never judges whether an offer is fair, legal or genuine.
 
-**Demo:** `demo/index.html` (23 anonymised cards; toggle to compare with the hand labels).
+**Live site:** https://YOUR-GITHUB-USERNAME.github.io/promise-card/ (the `docs/` folder, served by GitHub Pages)
+
+- **Check an offer:** paste any offer's terms. With no key, the page finds amounts, open-ended wording and
+  pointers to hidden documents, in your browser. With your own free Gemini key, it drafts the full card, and
+  every quote the AI returns is checked against your text before it is shown.
+- **23 real offers:** AI-drafted cards for 23 of the offers I collected (provider names hidden), with a toggle
+  to compare each answer with my hand label.
+- **How well it works:** the numbers below.
 
 ## Results (25 offers, 200 decisions)
 
@@ -74,6 +81,7 @@ python -m pytest -q
 python -m promise_card build --all --backend gemini --model gemini-3.5-flash-lite   # needs GEMINI_API_KEY
 python -m promise_card eval --labels data/labels.csv
 python tools/analyse_run.py runs/<run>
+python tools/build_demo.py runs/<run>/cards_v1.0.1      # rebuilds docs/index.html
 ```
 
 The evidence, source texts, labels and model outputs contain provider and private documents, so they are not
