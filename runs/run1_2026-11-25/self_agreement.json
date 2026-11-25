@@ -1,0 +1,33 @@
+{
+  "n": 80,
+  "self_agreement": 0.8125,
+  "self_kappa": 0.7228637413394919,
+  "model_vs_label_same_80": 0.675,
+  "model_kappa_same_80": 0.5227168425883433,
+  "promise_type_self_agreement": 0.7,
+  "changes": [
+    "L07.promise: vague -> stated",
+    "L07.terms_elsewhere: stated -> not_stated",
+    "L12.if_not_placed: vague -> stated",
+    "L12.terms_elsewhere: stated -> not_stated",
+    "L14.payment_timing: vague -> stated",
+    "L14.refuse_offer: not_stated -> not_applicable",
+    "L19.promise: vague -> stated",
+    "L19.if_not_placed: not_stated -> stated",
+    "L19.terms_elsewhere: not_stated -> stated",
+    "L20.total_cost: stated -> vague",
+    "L20.promise: vague -> stated",
+    "L20.refuse_offer: not_stated -> stated",
+    "L20.terms_elsewhere: stated -> not_stated",
+    "L26.promise: stated -> vague",
+    "L26.if_not_placed: vague -> not_stated"
+  ],
+  "change_kinds": {
+    "vague->stated": 5,
+    "stated->not_stated": 3,
+    "not_stated->not_applicable": 1,
+    "not_stated->stated": 3,
+    "stated->vague": 2,
+    "vague->not_stated": 1
+  }
+}

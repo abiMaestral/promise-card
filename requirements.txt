@@ -1,0 +1,8 @@
+pydantic>=2.6
+pypdf>=4
+pytest>=8
+# extraction backend: install one
+google-genai>=1.0      # GEMINI_API_KEY (free tier)
+# anthropic>=0.40      # ANTHROPIC_API_KEY
+# demo (Thursday)
+# streamlit>=1.40

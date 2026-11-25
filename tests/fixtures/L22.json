@@ -1,0 +1,17 @@
+{"_comment": "HAND-WRITTEN FIXTURE for tests/demo, not model output. One quote is deliberately not in the source, to show rejection.",
+ "promise_type": "internship",
+ "fields": [
+  {"field": "total_cost", "state": "stated", "value": "Rs 1,499 (non-tech, 7-day training) or Rs 9,999 (tech, 30-day training).",
+   "quotes": [{"doc_id": "L22", "text": "Non Tech Role( BDE, Sales, Customer support, HR, Operations, Telcaller/BPO) - Rs. 1499/-Only - 7 days training"},
+              {"doc_id": "L22", "text": "Tech Role ( Web Development, Mobile App development, Python, Flutter) - Rs 9999/- Only -30 days Training"}]},
+  {"field": "payment_timing", "state": "stated", "value": "Before the training starts.",
+   "quotes": [{"doc_id": "L22", "text": "Pay before the training starts."}]},
+  {"field": "promise", "state": "vague", "value": "A guaranteed internship; duration, pay and employer not described.",
+   "quotes": [{"doc_id": "L22", "text": "Get guaranteed internship"}]},
+  {"field": "conditions", "state": "not_stated", "value": "", "quotes": []},
+  {"field": "terms_can_change", "state": "not_stated", "value": "", "quotes": []},
+  {"field": "if_not_placed", "state": "stated", "value": "Full refund within 30 days.",
+   "quotes": [{"doc_id": "L22", "text": "Full refund if internship is not provided within 30 days"}]},
+  {"field": "refuse_offer", "state": "not_stated", "value": "", "quotes": []},
+  {"field": "terms_elsewhere", "state": "not_stated", "value": "", "quotes": []}
+ ]}

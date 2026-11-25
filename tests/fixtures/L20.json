@@ -1,0 +1,17 @@
+{"_comment": "HAND-WRITTEN FIXTURE for tests/demo, not model output.",
+ "promise_type": "stipend_or_pay",
+ "fields": [
+  {"field": "total_cost", "state": "stated", "value": "INR 350 one-time training fee for a 3-month internship; said to be the only payment.",
+   "quotes": [{"doc_id": "L20", "text": "For 3 Months internship period the training Fee is INR 350 (One Time Fee)"},
+              {"doc_id": "L20", "text": "This is the only payment"}]},
+  {"field": "payment_timing", "state": "not_stated", "value": "", "quotes": []},
+  {"field": "promise", "state": "stated", "value": "Remote internship paid INR 1000-5000 per month depending on performance.",
+   "quotes": [{"doc_id": "L20", "text": "Compensation: INR 1000- 5000/Month based on performance"}]},
+  {"field": "conditions", "state": "vague", "value": "Pay depends on 'performance', which is not defined.",
+   "quotes": [{"doc_id": "L20", "text": "based on performance"}]},
+  {"field": "terms_can_change", "state": "not_stated", "value": "", "quotes": []},
+  {"field": "if_not_placed", "state": "not_applicable", "value": "", "quotes": []},
+  {"field": "refuse_offer", "state": "not_applicable", "value": "", "quotes": []},
+  {"field": "terms_elsewhere", "state": "vague", "value": "Refers to the application form for the fee's purpose.",
+   "quotes": [{"doc_id": "L20", "text": "As outlined in our application form"}]}
+ ]}

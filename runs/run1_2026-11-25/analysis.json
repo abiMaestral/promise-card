@@ -1,0 +1,63 @@
+{
+  "raw_model_accuracy": 0.66,
+  "raw_model_kappa": 0.49423577538118263,
+  "after_checks_accuracy": 0.685,
+  "after_checks_kappa": 0.536065392687507,
+  "code_changes": {
+    "helped: not_stated -> stated": 1,
+    "helped: stated -> vague": 7,
+    "hurt: stated -> not_stated": 2,
+    "hurt: stated -> vague": 1,
+    "neutral: stated -> not_stated": 4,
+    "neutral: stated -> vague": 1
+  },
+  "quotes_total": 187,
+  "quotes_rejected": 11,
+  "per_field": {
+    "total_cost": {
+      "raw": 0.52,
+      "final": 0.52
+    },
+    "payment_timing": {
+      "raw": 0.76,
+      "final": 0.76
+    },
+    "promise": {
+      "raw": 0.68,
+      "final": 0.84
+    },
+    "conditions": {
+      "raw": 0.28,
+      "final": 0.36
+    },
+    "terms_can_change": {
+      "raw": 0.92,
+      "final": 0.92
+    },
+    "if_not_placed": {
+      "raw": 0.68,
+      "final": 0.64
+    },
+    "refuse_offer": {
+      "raw": 0.64,
+      "final": 0.6
+    },
+    "terms_elsewhere": {
+      "raw": 0.8,
+      "final": 0.84
+    }
+  },
+  "label_distribution": {
+    "contradictory": 5,
+    "stated": 77,
+    "vague": 61,
+    "not_stated": 52,
+    "not_applicable": 5
+  },
+  "model_distribution_final": {
+    "stated": 99,
+    "not_stated": 55,
+    "not_applicable": 8,
+    "vague": 38
+  }
+}

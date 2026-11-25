@@ -1,0 +1,21 @@
+# private: provider documents, friends' documents, provider names/URLs
+evidence/
+evidence_context/
+data/sources/
+data/labels.csv
+data/offers.csv
+data/cards/
+data/extractions/*.json
+__pycache__/
+.pytest_cache/
+.env
+data/private_brands.txt
+data/evidence_gaps.json
+# run outputs contain provider and friend text; only the scores are public
+runs/*/*.json
+!runs/*/analysis.json
+!runs/*/results.json
+!runs/*/self_agreement.json
+runs/*/cards/
+runs/*/cards_v1.0.1/
+demo/template.html.bak

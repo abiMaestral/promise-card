@@ -1,0 +1,38 @@
+{
+  "offers": 25,
+  "field_decisions": 200,
+  "state_accuracy": 0.645,
+  "state_kappa": 0.47991063253122374,
+  "state_accuracy_evidence_complete": 0.6564102564102564,
+  "fields_excluded_for_evidence_gaps": 5,
+  "per_field_accuracy": {
+    "total_cost": 0.52,
+    "payment_timing": 0.76,
+    "promise": 0.84,
+    "conditions": 0.36,
+    "terms_can_change": 0.64,
+    "if_not_placed": 0.64,
+    "refuse_offer": 0.6,
+    "terms_elsewhere": 0.8
+  },
+  "promise_type_accuracy": 0.68,
+  "quote_fidelity": 0.9411764705882353,
+  "confusion": {
+    "contradictory -> not_stated": 1,
+    "contradictory -> stated": 2,
+    "contradictory -> vague": 2,
+    "not_applicable -> not_applicable": 2,
+    "not_applicable -> not_stated": 2,
+    "not_applicable -> stated": 1,
+    "not_stated -> not_applicable": 6,
+    "not_stated -> not_stated": 37,
+    "not_stated -> stated": 5,
+    "not_stated -> vague": 4,
+    "stated -> not_stated": 4,
+    "stated -> stated": 61,
+    "stated -> vague": 12,
+    "vague -> not_stated": 11,
+    "vague -> stated": 21,
+    "vague -> vague": 29
+  }
+}
