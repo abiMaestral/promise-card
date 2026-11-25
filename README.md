@@ -14,7 +14,7 @@ conditions, whether terms can change, what happens if you are not placed, whethe
 and whether terms are kept elsewhere). Each answer is marked **stated, vague, contradictory, not stated** or
 **not applicable**, with an exact quote. The card never judges whether an offer is fair, legal or genuine.
 
-**Live site:** https://YOUR-GITHUB-USERNAME.github.io/promise-card/ (the `docs/` folder, served by GitHub Pages)
+**Live site:** https://abiMaestral.github.io/promise-card/ (the `docs/` folder, served by GitHub Pages)
 
 - **Check an offer:** paste any offer's terms. With no key, the page finds amounts, open-ended wording and
   pointers to hidden documents, in your browser. With your own free Gemini key, it drafts the full card, and
