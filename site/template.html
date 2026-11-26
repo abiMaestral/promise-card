@@ -287,7 +287,7 @@ const OPEN = [["from time to time",/from time to time/i],["may be amended/modifi
  ["typically/usually",/\b(?:typically|usually|generally)\b/i],["continued use = acceptance",/continued use[^.]{0,80}accept/i],
  ["based on performance",/based on (?:your )?[^.]{0,30}?(?:performance|merit|evaluation)/i],
  ["may be considered",/\bmay be (?:considered|offered|eligible|allotted|assigned)\b/i],
- ["approximately",/\b(?:approximately|approx\.?|around|about) \d/i],["successful completion",/successful(?:ly)? complet\w*/i]];
+ ["approximately",/\b(?:approximately|approx\.?|around|about) \d[\d.,]*/i],["successful completion",/successful(?:ly)? complet\w*/i]];
 const DEF = [["shared upon/after enrolment",/shared[^.]{0,40}(?:upon|after|on)[^.]{0,30}(?:enrol|enroll|registration|verification|payment)/i],
  ["in the offer email/letter",/(?:in|via) the (?:offer|enrol\w*|admission) (?:email|letter|mail)/i],
  ["separate policy/agreement",/(?:separate|our|the) (?:placement|refund|isa|income share)? ?(?:policy|agreement)(?! below)/i],
@@ -314,15 +314,16 @@ function checkWording(){
   const t = document.getElementById("txt").value.trim(); const out = document.getElementById("out");
   if (!t){out.innerHTML=`<div class="empty"><div><div class="big">Nothing to check</div>Paste some terms first, or load the sample.</div></div>`;return;}
   const ss = sentences(t); let open=[], def=[];
-  for (const s of ss){for (const [l,rx] of OPEN) if (rx.test(s)) open.push([l,s]); for (const [l,rx] of DEF) if (rx.test(s)) def.push([l,s]);}
+  // one entry per sentence, listing every pattern it matched
+  for (const s of ss){const o=OPEN.filter(([l,rx])=>rx.test(s)), d=DEF.filter(([l,rx])=>rx.test(s)); if (o.length) open.push([o,s]); if (d.length) def.push([d,s]);}
   const amts = [...new Set((t.match(AMT)||[]).map(a=>a.trim()))];
-  const mark = (s,rx) => esc(s).replace(new RegExp(rx.source,"ig"),m=>`<mark>${m}</mark>`);
+  const mark = (s,pats) => {let h=esc(s); for (const [,rx] of pats) h=h.replace(new RegExp(rx.source,"ig"),m=>`<mark>${m}</mark>`); return h;};
   const pays = ss.filter(s=>/\b(?:fee|fees|pay|payment|deposit|charge|charges|registration amount|emi)\b/i.test(s));
   const payNote = pays.length ? `<p class="small" style="margin-top:10px"><b>Payment mentioned:</b> ${pays.slice(0,3).map(esc).join(" · ")}</p>`
     : `<p class="small" style="margin-top:10px"><b>No payment is mentioned in this text.</b> If you're asked to pay later (at the venue, after "HR screening", for "registration"), ask for it in writing first.</p>`;
   let h = `<div class="box f" style="animation-delay:0ms"><h4>Amounts and time limits (${amts.length})</h4>${amts.length?`<div class="chips">${amts.map(a=>`<span class="chip">${esc(a)}</span>`).join("")}</div>`:`<p class="small">None found.</p>`}${payNote}</div>`;
-  h += `<div class="box f" style="animation-delay:120ms"><h4>Open-ended or undefined wording (${open.length})</h4><p class="small">Terms the provider can change, or that depend on something never defined.</p>${open.map(([l,s])=>`<div class="flag"><b>${esc(l)}</b>${mark(s,OPEN.find(o=>o[0]===l)[1])}</div>`).join("")||"<p class='small'>None found.</p>"}</div>`;
-  h += `<div class="box f" style="animation-delay:240ms"><h4>Terms kept in another document (${def.length})</h4><p class="small">Ask to see these before you pay.</p>${def.map(([l,s])=>`<div class="flag def"><b>${esc(l)}</b>${mark(s,DEF.find(o=>o[0]===l)[1])}</div>`).join("")||"<p class='small'>None found.</p>"}</div>`;
+  h += `<div class="box f" style="animation-delay:120ms"><h4>Open-ended or undefined wording (${open.length} line${open.length===1?"":"s"})</h4><p class="small">Terms the provider can change, or that depend on something never defined.</p>${open.map(([ps,s])=>`<div class="flag"><b>${ps.map(p=>esc(p[0])).join(" · ")}</b>${mark(s,ps)}</div>`).join("")||"<p class='small'>None found.</p>"}</div>`;
+  h += `<div class="box f" style="animation-delay:240ms"><h4>Terms kept in another document (${def.length} line${def.length===1?"":"s"})</h4><p class="small">Ask to see these before you pay.</p>${def.map(([ps,s])=>`<div class="flag def"><b>${ps.map(p=>esc(p[0])).join(" · ")}</b>${mark(s,ps)}</div>`).join("")||"<p class='small'>None found.</p>"}</div>`;
   out.innerHTML = h;
 }
 
