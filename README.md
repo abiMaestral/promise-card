@@ -13,6 +13,7 @@ A **Promise Card** answers eight questions about an offer (what you pay, when, w
 conditions, whether terms can change, what happens if you are not placed, whether you can refuse an offer,
 and whether terms are kept elsewhere). Each answer is marked **stated, vague, contradictory, not stated** or
 **not applicable**, with an exact quote. The card never judges whether an offer is fair, legal or genuine.
+FUll 9min Demo video: https://www.loom.com/share/1dfce7b627b14fc5b2de596b54a8df93
 
 **Live site:** https://abiMaestral.github.io/promise-card/ (the `docs/` folder, served by GitHub Pages)
 
