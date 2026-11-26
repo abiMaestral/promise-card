@@ -137,6 +137,12 @@ and to call vague terms missing (vague → not stated: 11 → 17), and it still 
 More rules made the prompt longer without fixing the judgement. A run with a larger model was planned
 but every attempt hit "model overloaded" errors on the free tier, so it is not reported.
 
+**As a warning system the card does better than its overall score suggests.** Counting an answer as a
+warning when it is vague, contradictory or not stated: 89% of the card's warnings were also problems in
+the hand labels (83 of 93), it flagged 70% of the problems the labeller found (83 of 118), and it flagged
+at least one real problem in every one of the 25 offers. Most of its misses are a vague term called
+clear, so it under-warns rather than over-warns.
+
 What this means for the card: a model can draft it, and the quote check makes every shown quote real,
 but about 3 answers in 10 still need a human look, mostly where the model is more confident than the
 document. A card that marks *vague* as *stated* would reassure a candidate exactly where it should warn.

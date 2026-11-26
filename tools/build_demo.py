@@ -61,6 +61,7 @@ if extra.exists():
 guide = Path("promise_card/guide_for_model.md").read_text(encoding="utf-8")
 sample = Path("tests/fixtures/L20.txt").read_text(encoding="utf-8")
 sample = "\n".join(re.sub(r"^[^\w(\[\"]+", "", l) for l in sample.splitlines() if not l.startswith("#"))  # drop OCR icon glyphs
+sample = "\n".join(("\n" + l + "\n") if (len(l) < 40 and not l.rstrip().endswith((".", ")", ",", ":"))) or l.endswith("?") else l for l in sample.splitlines())  # headings on their own
 page = (Path("site/template.html").read_text(encoding="utf-8")
         .replace("/*DATA*/[]", json.dumps(data, ensure_ascii=False))
         .replace("/*RESULTS*/[]", json.dumps(RESULTS, ensure_ascii=False))

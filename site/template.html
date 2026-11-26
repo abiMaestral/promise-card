@@ -228,6 +228,16 @@ footer a{color:#ffd79a}
 
 <section class="panel" id="p-results" hidden>
   <div class="res">
+    <div class="sheet" style="grid-column:1/-1">
+      <h3>Does the card warn you when it should?</h3>
+      <p class="small">A "warning" is any answer stamped vague, contradictory or not stated. Compared with my hand labels (AI + checks, 200 answers):</p>
+      <div class="stats" style="margin:12px 0 0;padding:0;grid-template-columns:repeat(3,minmax(0,1fr))">
+        <div class="stat"><b>89%</b><span>of the card's warnings were real problems (83 of 93)</span></div>
+        <div class="stat"><b>70%</b><span>of the problems I found by hand, the card also flagged (83 of 118)</span></div>
+        <div class="stat"><b>25 / 25</b><span>offers where the card flagged at least one real problem</span></div>
+      </div>
+      <p class="small" style="margin-top:12px">Reading and labelling one offer by hand took me 5–8 minutes after days of collecting; the card takes under a minute. My hand labels exist to measure the AI, not to replace it.</p>
+    </div>
     <div class="sheet">
       <h3>AI vs my hand labels</h3>
       <p class="small">25 offers × 8 questions = 200 answers, compared with the labels I made by hand before seeing any AI output.</p>
@@ -422,6 +432,9 @@ const runCount = el => {const n=+el.dataset.count, suf=el.dataset.suffix||"", t0
 const io = new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){runCount(e.target); io.unobserve(e.target);}}),{threshold:.4});
 counters.forEach(c=>io.observe(c));
 document.getElementById("find").addEventListener("input",renderList);
+document.getElementById("go").onclick = checkWording;
+document.getElementById("ai").onclick = draftCard;
+document.getElementById("sample").onclick = () => {document.getElementById("txt").value = SAMPLE; checkWording();};
 renderList(); renderCard(false); moveUl(tabs[0]);
 requestAnimationFrame(()=>document.getElementById("hero").classList.add("go"));
 }
