@@ -28,3 +28,11 @@
 - Rules v1.0.1 apply to all runs. No labels were changed.
 - Result (26 Nov): run 2a scored 64.5% (κ 0.48) after checks, below run 1's 68.5%. Run 2b (gemini-3.8-flash)
   could not be completed: the model returned 503/504 "overloaded" on every attempt.
+
+## Live tool v1.1 — 26 Nov 2026 (after the evaluation; evaluated numbers use v1.0.1)
+- Found by testing the site on a real WhatsApp interview message:
+  "₹2.5–5.5 LPA" was split in two, and "approximately 2.5 months" was read as "5 months".
+  Amounts now handle ranges and decimals.
+- The site's wording check adds three open-ended patterns: "based on … performance" with words in between
+  ("based on skills and performance"), "may be considered/offered/eligible", and "approximately <number>".
+- promise_card/clauses.py is unchanged, so all reported scores stay reproducible.

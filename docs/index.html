@@ -285,7 +285,9 @@ const OPEN = [["from time to time",/from time to time/i],["may be amended/modifi
  ["additional conditions",/(?:any )?additional (?:conditions|terms|criteria)/i],["sole discretion",/(?:sole|absolute) discretion/i],
  ["subject to T&C",/subject to (?:the )?(?:t\s*&\s*c|terms and conditions|terms & conditions)/i],["e.g. in a term",/\(e\.g\.,?[^)]*\)/i],
  ["typically/usually",/\b(?:typically|usually|generally)\b/i],["continued use = acceptance",/continued use[^.]{0,80}accept/i],
- ["based on performance",/based on (?:your )?(?:performance|merit|evaluation)/i],["successful completion",/successful(?:ly)? complet\w*/i]];
+ ["based on performance",/based on (?:your )?[^.]{0,30}?(?:performance|merit|evaluation)/i],
+ ["may be considered",/\bmay be (?:considered|offered|eligible|allotted|assigned)\b/i],
+ ["approximately",/\b(?:approximately|approx\.?|around|about) \d/i],["successful completion",/successful(?:ly)? complet\w*/i]];
 const DEF = [["shared upon/after enrolment",/shared[^.]{0,40}(?:upon|after|on)[^.]{0,30}(?:enrol|enroll|registration|verification|payment)/i],
  ["in the offer email/letter",/(?:in|via) the (?:offer|enrol\w*|admission) (?:email|letter|mail)/i],
  ["separate policy/agreement",/(?:separate|our|the) (?:placement|refund|isa|income share)? ?(?:policy|agreement)(?! below)/i],
@@ -293,8 +295,10 @@ const DEF = [["shared upon/after enrolment",/shared[^.]{0,40}(?:upon|after|on)[^
  ["refer to / as per",/\b(?:refer to|as per) (?:the |our )?(?:terms|policy|agreement|document|guidelines)/i],
  ["will be shared later",/will be (?:shared|provided|communicated|sent) (?:later|separately|after|upon|on)/i]];
 // single line breaks inside a paragraph (common in copied PDF text) are joined; blank lines and list items split
-const sentences = t => t.replace(/\n(?!\n|\s*(?:[-•*]|\d+[.)])\s)/g," ").split(/(?<=[.!?])\s+|\n+/).map(s=>s.trim()).filter(Boolean);
-const AMT = /(?:rs\.?|₹|inr)\s*\d[\d,]*(?:\.\d+)?(?:\s*(?:lakh|lac|k)\b)?|\d[\d,.]*\s*(?:lpa|%)|\d+\s*(?:days?|weeks?|months?|years?)\b/ig;
+const sentences = t => t.replace(/\n(?!\n|\s*(?:[-•*]|\d+[.)])\s|\s*[A-Z][\w &\/()-]{0,30}:)/g," ").split(/(?<=[.!?])\s+|\n+/).map(s=>s.trim()).filter(Boolean);
+// money (incl. ranges like ₹2.5–5.5 LPA), percentages, and durations (incl. decimals like 2.5 months)
+const N = String.raw`\d[\d,]*(?:\.\d+)?`;
+const AMT = new RegExp(String.raw`(?:rs\.?|₹|inr)\s*${N}(?:\s*[-–to]+\s*${N})?(?:\s*(?:lakh|lac|lpa|k)\b)?|${N}(?:\s*[-–]\s*${N})?\s*(?:lpa|%)|${N}(?:\s*[-–]\s*${N})?\s*(?:days?|weeks?|months?|years?)\b`, "ig");
 
 /* ---- same as promise_card/quote_check.py ---- */
 function norm(t){
@@ -313,7 +317,10 @@ function checkWording(){
   for (const s of ss){for (const [l,rx] of OPEN) if (rx.test(s)) open.push([l,s]); for (const [l,rx] of DEF) if (rx.test(s)) def.push([l,s]);}
   const amts = [...new Set((t.match(AMT)||[]).map(a=>a.trim()))];
   const mark = (s,rx) => esc(s).replace(new RegExp(rx.source,"ig"),m=>`<mark>${m}</mark>`);
-  let h = `<div class="box f" style="animation-delay:0ms"><h4>Amounts and time limits (${amts.length})</h4>${amts.length?`<div class="chips">${amts.map(a=>`<span class="chip">${esc(a)}</span>`).join("")}</div>`:`<p class="small">None found. If you are asked to pay, the amount isn't in this text.</p>`}</div>`;
+  const pays = ss.filter(s=>/\b(?:fee|fees|pay|payment|deposit|charge|charges|registration amount|emi)\b/i.test(s));
+  const payNote = pays.length ? `<p class="small" style="margin-top:10px"><b>Payment mentioned:</b> ${pays.slice(0,3).map(esc).join(" · ")}</p>`
+    : `<p class="small" style="margin-top:10px"><b>No payment is mentioned in this text.</b> If you're asked to pay later (at the venue, after "HR screening", for "registration"), ask for it in writing first.</p>`;
+  let h = `<div class="box f" style="animation-delay:0ms"><h4>Amounts and time limits (${amts.length})</h4>${amts.length?`<div class="chips">${amts.map(a=>`<span class="chip">${esc(a)}</span>`).join("")}</div>`:`<p class="small">None found.</p>`}${payNote}</div>`;
   h += `<div class="box f" style="animation-delay:120ms"><h4>Open-ended or undefined wording (${open.length})</h4><p class="small">Terms the provider can change, or that depend on something never defined.</p>${open.map(([l,s])=>`<div class="flag"><b>${esc(l)}</b>${mark(s,OPEN.find(o=>o[0]===l)[1])}</div>`).join("")||"<p class='small'>None found.</p>"}</div>`;
   h += `<div class="box f" style="animation-delay:240ms"><h4>Terms kept in another document (${def.length})</h4><p class="small">Ask to see these before you pay.</p>${def.map(([l,s])=>`<div class="flag def"><b>${esc(l)}</b>${mark(s,DEF.find(o=>o[0]===l)[1])}</div>`).join("")||"<p class='small'>None found.</p>"}</div>`;
   out.innerHTML = h;
