@@ -1,6 +1,6 @@
 # Placement Promise Card
 
-**Abishikth Ebenezer** · research prototype for the ATRISI Research Intern assessment · November 2026
+**Abishikth Ebenezer** · built for the ATRISI Amplify Builder Challenge · November 2026
 
 Paid placement, internship and "job guarantee" offers in India describe what they promise in very different
 ways, and much of what a candidate needs to know is vague, missing, contradictory, or kept in a document
@@ -31,10 +31,12 @@ and whether terms are kept elsewhere). Each answer is marked **stated, vague, co
 | Model alone (Gemini 3.5 Flash-Lite) | 66.0% | 0.49 |
 | Model + code checks, rules v1.0 as frozen | 64.5% | 0.48 |
 | Model + code checks, rules v1.0.1 (one bug fixed) | **68.5%** | **0.54** |
+| Run 2: same, plus my full labelling guide in the prompt | 64.5% | 0.48 |
 
 - **11 of 187 model quotes (5.9%) were not in the source**; the quote check removed all of them.
 - The model's main error is calling **vague** terms **stated** (21 of 200), the same boundary where the
   human re-labels disagreed most.
+- **Giving the model my labelling rules made it worse** (68.5% → 64.5%): it called even more vague terms clear.
 - **0 of 5 contradictions** were found: all five are inside a single document, and the code only compares
   amounts across documents. This is the main gap.
 - From the hand labels alone: total cost can be worked out for **6 of 25** offers; qualifying conditions are

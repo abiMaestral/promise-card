@@ -99,6 +99,7 @@ when the first model was overloaded), temperature 0, one call per offer, the sam
 | Model + code checks (rules v1.0, as frozen) | 64.5% | 0.48 |
 | Model + code checks (rules v1.0.1, one bug fixed) | **68.5%** | **0.54** |
 | v1.0.1, fields whose label quote is in the saved evidence (195) | 69.7% | |
+| Run 2 (26 Nov): same model, prompt + the full labelling guide, rules v1.0.1 | 64.5% | 0.48 |
 
 - **Quotes**: 187 quotes returned; **11 (5.9%) were not in the source** and were removed by the checker.
   Without the checker, about 1 in 17 quotes shown to a reader would have been invented or altered.
@@ -128,6 +129,13 @@ model reaches about five-sixths of the labeller's own consistency. Seven of the 
 human passes were between *stated* and *vague*, the same boundary where the model makes most of its errors:
 deciding when "100% job assistance" or "full refund as per our policy" is a clear answer is genuinely hard,
 which is one more reason the card shows the quote next to every verdict.
+
+**Giving the model my labelling rules did not help.** Run 2 added the full labelling guide (the same
+decision order and examples I labelled with) to the prompt, with the same model and checks. Agreement
+fell from 68.5% to 64.5%. The model became *more* willing to call terms clear (vague → stated: 21 → 24)
+and to call vague terms missing (vague → not stated: 11 → 17), and it still found no contradictions.
+More rules made the prompt longer without fixing the judgement. A run with a larger model was planned
+but every attempt hit "model overloaded" errors on the free tier, so it is not reported.
 
 What this means for the card: a model can draft it, and the quote check makes every shown quote real,
 but about 3 answers in 10 still need a human look, mostly where the model is more confident than the

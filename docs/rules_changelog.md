@@ -26,3 +26,5 @@
 - Run 2a: gemini-3.5-flash-lite + guide prompt (effect of the instructions).
 - Run 2b: gemini-3.8-flash + guide prompt (effect of a stronger model).
 - Rules v1.0.1 apply to all runs. No labels were changed.
+- Result (26 Nov): run 2a scored 64.5% (κ 0.48) after checks, below run 1's 68.5%. Run 2b (gemini-3.8-flash)
+  could not be completed: the model returned 503/504 "overloaded" on every attempt.
